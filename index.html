@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>&lt;model-viewer&gt; combined</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="model-viewer combined" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link type="text/css" href="./styles.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <model-viewer
+      id="gear"
+      src="Animation.glb"
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      camera-controls
+      tone-mapping="neutral"
+      poster="poster.png"
+      shadow-intensity="1"
+      autoplay
+      animation-name="BodyAction"
+      auto-rotate
+      camera-orbit="-153.3deg 72.93deg 1.068m"
+      field-of-view="26.26deg"
+    >
+      <!-- HOTSPOTS -->
+      <button
+        class="Hotspot"
+        slot="hotspot-1"
+        data-position="-0.0985040221047676m 0.06730569100951862m 0.13569380158033273m"
+        data-normal="-0.45910483381865713m 0.12420518972347898m 0.8796566502960675m"
+        data-visibility-attribute="visible"
+        onmouseenter="showHotspot('hotspot1')"
+        onmouseleave="hideHotspot('hotspot1')"
+      >
+        <div class="HotspotAnnotation" id="hotspot1" style="visibility:hidden">
+          Wheels
+        </div>
+      </button>
+
+      <button
+        class="Hotspot"
+        slot="hotspot-2"
+        data-position="0.17549273502186036m 0.1042449393494977m -0.12728839431392602m"
+        data-normal="0.8155157646707344m -0.3503587525161299m -0.46063302325044886m"
+        data-visibility-attribute="visible"
+        onmouseenter="showHotspot('hotspot2')"
+        onmouseleave="hideHotspot('hotspot2')"
+      >
+        <div class="HotspotAnnotation" id="hotspot2" style="visibility:hidden">
+          Speaker
+        </div>
+      </button>
+
+      <button
+        class="Hotspot"
+        slot="hotspot-4"
+        data-position="-0.13150214761610637m 0.06123473899552276m 0.03994729176513018m"
+        data-normal="-0.9041292627124512m -0.17413021649156998m 0.3901652778139525m"
+        data-visibility-attribute="visible"
+        onmouseenter="showHotspot('hotspot4')"
+        onmouseleave="hideHotspot('hotspot4')"
+      >
+        <div class="HotspotAnnotation" id="hotspot4" style="visibility:hidden">
+          Lights
+        </div>
+      </button>
+
+      <!-- Default UI slots -->
+      <div class="progress-bar hide" slot="progress-bar">
+        <div class="update-bar"></div>
+      </div>
+
+      <button slot="ar-button" id="ar-button">View in your space</button>
+
+      <div id="ar-prompt">
+        <img src="ar_hand_prompt.png" />
+      </div>
+
+      <!-- ANIMATION CONTROLS -->
+      <div class="controls" style="position: absolute; bottom: 0px; left: 200px;">
+        <div>
+          Animation:
+          <button id="bodyBtn" onclick="playAnim('BodyAction')">Body</button>
+          <button id="frontBtn" onclick="playAnim('Front Light C.001Action')">Front light</button>
+          <button id="backBtn" onclick="playAnim('Back lightAction')">Back light</button>
+          <button id="pauseBtn" onclick="pauseAnim()">Pause</button>
+        </div>
+      </div>
+
+      <!-- VARIANT CONTROLS (only works if Animation.glb has variants) -->
+      <div style="position:absolute; bottom: 40px; left: 200px;">
+        <div>
+          Variant:
+          <button onclick="setVariant('V1')">01</button>
+          <button onclick="setVariant('V2')">02</button>
+          <button onclick="setVariant('V3')">03</button>
+        </div>
+      </div>
+
+      <!-- CAMERA VIEW CONTROLS -->
+      <div style="position:absolute; bottom:0px; right:0px;">
+        <button onclick="setOrbit('-41.42deg 90.33deg 0.8361m')">View 1</button>
+        <button onclick="setOrbit('-114.3deg 52.63deg 0.988m')">View 2</button>
+        <button onclick="setOrbit('-223.3deg 84.12deg 0.988m')">View 3</button>
+      </div>
+    </model-viewer>
+
+    <!-- Load model-viewer -->
+    <script
+      type="module"
+      src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"
+    ></script>
+
+    <!-- Combined JS -->
+    <script>
+      const gear = document.getElementById("gear");
+
+      // Hotspots
+      function showHotspot(id) {
+        document.getElementById(id).style.visibility = "visible";
+      }
+      function hideHotspot(id) {
+        document.getElementById(id).style.visibility = "hidden";
+      }
+
+      // Animations
+      function playAnim(name) {
+        gear.pause();
+        gear.currentTime = 0; // restart
+        gear.loop = true;
+        gear.animationName = name;
+        gear.play();
+      }
+      function pauseAnim() {
+        gear.pause();
+      }
+
+      // Variants
+      function setVariant(name) {
+        gear.variantName = name;
+      }
+
+      // Camera views
+      function setOrbit(orbit) {
+        gear.cameraOrbit = orbit;
+      }
+
+      // Optional: debug what your GLB actually contains
+      gear.addEventListener("load", () => {
+        console.log("availableVariants:", gear.availableVariants);
+        console.log("availableAnimations:", gear.availableAnimations);
+      });
+    </script>
+  </body>
+</html>
